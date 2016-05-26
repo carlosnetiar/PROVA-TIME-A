@@ -26,8 +26,10 @@ import br.ceuma.sisagenda.siag.br.ceuma.sisagenda.siag.model.Agendamento;
 public class AgendamentoActivity extends AppCompatActivity {
 
     // json array response url
-    private String urlJsonArray = "http://localhost/aneh/rest/listaAgenda.php?uid=";
+    private String urlJsonArray = "http://www.baoba.eco.br/rest/agenda.php?uid=";
     private ListView listadeagendamentos;
+    private List<Agendamento> lista = new ArrayList<Agendamento>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class AgendamentoActivity extends AppCompatActivity {
             Toast.makeText(AgendamentoActivity.this, query.toString(), Toast.LENGTH_SHORT).show();
             listadeagendamentos = (ListView) findViewById(R.id.listView);
 
-            List<Agendamento> lista = new ArrayList<Agendamento>();
+            /*List<Agendamento> lista = new ArrayList<Agendamento>();
 
             Agendamento c1 = new Agendamento();
 
@@ -78,9 +80,10 @@ public class AgendamentoActivity extends AppCompatActivity {
             lista.add(c3);
 
             AgendamentoAdapter meuadapter = new AgendamentoAdapter(this, lista);
-            listadeagendamentos.setAdapter(meuadapter);
+            listadeagendamentos.setAdapter(meuadapter);*/
 
-            //solicitarWebService();
+            //solicitarWebService(query);
+            teste(query);
         }
     }
 
@@ -97,29 +100,30 @@ public class AgendamentoActivity extends AppCompatActivity {
         }
     }
 
-    private void solicitarWebService(){
-
-        final List<Agendamento> lista = new ArrayList<Agendamento>();
-
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, urlJsonArray,
-                new Response.Listener<JSONObject>() {
+    /*private void solicitarWebService(String query){
+        JsonArrayRequest req = new JsonArrayRequest(urlJsonArray + query,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
 
                         try {
 
-                            JSONArray jsonArray = response.getJSONArray("agendamentos");
-                            for (int i = 0; i < jsonArray.length(); i++) {
+                           //JSONArray jsonArray = response.getJSONArray("agendamentos");
+                            for (int i = 0; i < response.length(); i++) {
 
-                                JSONObject agendamento = jsonArray.getJSONObject(i);
+                                JSONObject agendamento = response.getJSONObject(i);
+
                                 Agendamento ag = new Agendamento();
-                                ag.setNome(agendamento.getString("nome"));
-                                ag.setDataAgendamento(agendamento.getString("data"));
-                                ag.setCategoria(agendamento.getString("categoria"));
-                                ag.setServico(agendamento.getString("servico"));
+
+                                ag.setNome(agendamento.getString("nome_aluno"));
+                                ag.setDataAgendamento(agendamento.getString("dia"));
+                                ag.setCategoria(agendamento.getString("nome_cat"));
+                                ag.setServico(agendamento.getString("nome_servico"));
 
                                 lista.add(ag);
                             }
+                            AgendamentoAdapter meuadapter = new AgendamentoAdapter(getApplicationContext(), lista);
+                            listadeagendamentos.setAdapter(meuadapter);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -136,8 +140,49 @@ public class AgendamentoActivity extends AppCompatActivity {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
+    }*/
 
-        AgendamentoAdapter meuadapter = new AgendamentoAdapter(this, lista);
-        listadeagendamentos.setAdapter(meuadapter);
+    private void teste(String query){
+        //listadeagendamentos = (ListView) findViewById(R.id.listView);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, urlJsonArray + query,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            JSONArray jsonArray = response.getJSONArray("agendamentos");
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+
+                                JSONObject agendamento = jsonArray.getJSONObject(i);
+
+                                Agendamento ag = new Agendamento();
+
+                                ag.setNome(agendamento.getString("nome_aluno"));
+                                ag.setDataAgendamento(agendamento.getString("dia"));
+                                ag.setCategoria(agendamento.getString("nome_cat"));
+                                ag.setServico(agendamento.getString("nome_servico"));
+
+                                lista.add(ag);
+                            }
+                            AgendamentoAdapter meuadapter = new AgendamentoAdapter(getBaseContext(), lista);
+                            listadeagendamentos.setAdapter(meuadapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Volley", "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
     }
 }
