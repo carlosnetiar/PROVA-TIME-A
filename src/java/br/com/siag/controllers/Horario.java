@@ -188,20 +188,25 @@ public class Horario extends Controller {
             aluno = (UsuarioBean) request.getSession().getAttribute("usuario");
 
             //CHAMANDO OS METODOS DAO COM OS PARAMETROS PARA JDBC
-            dataDAO.alterarStatus(Integer.valueOf(this.args[0]));
-            agendaDAO.agendarAula(agendaBean);
+            //dataDAO.alterarStatus(Integer.valueOf(this.args[0]));
+            //agendaDAO.agendarAula(agendaBean);
             servicoBean = servicosDAO.servicoEspecifico(Integer.valueOf(request.getSession().getAttribute("servico").toString()));
             catServicoBean = servicosDAO.categoriaEspecifica(Integer.valueOf(request.getSession().getAttribute("categoria").toString()));
             dataBean = dataDAO.carregarDataEspecifica(Integer.valueOf(this.args[0]));
 
             //RETORNANDO UMA MENSAGEM NA TELA SE OCORREU TUDO BEM
+            if(dataDAO.alterarStatus(Integer.valueOf(this.args[0])) &&  agendaDAO.agendarAula(agendaBean)){
             request.setAttribute("erroMsg", Feedback.sucesso());
-
+            
             //ENVIAR EMAIL DE CONFIRMAÇÃO DE AGENDAMENTO
             String corpo = Comprovante.corpoComprovante(aluno.getNome_user(), String.valueOf(dataBean.getDia()), dataBean.getHora(), catServicoBean.getNome_categoria(), servicoBean.getNome_servico());
-            // FEmail.enviar("Marcus", "mvcartagenes@gmail.com", "Email Teste", corpo);
+            FEmail.enviar("Marcus", aluno.getEmail_user(), "Comprovação de Agendamento - SIAG", corpo);
             procurar();
-
+            
+            }else{
+            request.setAttribute("erroMsg", Feedback.erroSistema());
+            procurar();
+            }
             //TRATAMENTO DE EXCESSÕES COM USO DE MULTICATCH
         } catch (NullPointerException | ArrayIndexOutOfBoundsException | NumberFormatException ex) {
             procurar();

@@ -23,7 +23,7 @@ public class FEmail {
         String nomeRemetente = "FRADE Tecnologia";
 
         String protocolo = "smtp";
-        String servidor = "smtp.gmail.com";  // do painel de controle do SMTP
+        String servidor = "smtplw.com.br";  // do painel de controle do SMTP
         String username = "fradeneto"; // do painel de controle do SMTP
         String senha = "eHrluZqD7858"; // do painel de controle do SMTP
         String porta = "587";   // do painel de controle do SMTP

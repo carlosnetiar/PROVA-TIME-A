@@ -15,6 +15,11 @@ public class Feedback {
         return "<div class=\"alert alert-danger\">\n"
                 + "               <strong>Erro: </strong> Nenhum usuário encontrado com este CPF: <strong>"+cpf+"</strong> </div>";
     }
+    
+    public static String erroSistema() {
+        return "<div class=\"alert alert-danger\">\n"
+                + "               <strong>Erro: </strong> Ocorreu um erro no sistema, por favor tente mais tarde ! </div>";
+    }
 
     public static String erroCategoria() {
         return "<div class=\"alert alert-danger\">\n"
