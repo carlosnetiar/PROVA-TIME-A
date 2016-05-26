@@ -188,8 +188,6 @@ public class Horario extends Controller {
             aluno = (UsuarioBean) request.getSession().getAttribute("usuario");
 
             //CHAMANDO OS METODOS DAO COM OS PARAMETROS PARA JDBC
-            //dataDAO.alterarStatus(Integer.valueOf(this.args[0]));
-            //agendaDAO.agendarAula(agendaBean);
             servicoBean = servicosDAO.servicoEspecifico(Integer.valueOf(request.getSession().getAttribute("servico").toString()));
             catServicoBean = servicosDAO.categoriaEspecifica(Integer.valueOf(request.getSession().getAttribute("categoria").toString()));
             dataBean = dataDAO.carregarDataEspecifica(Integer.valueOf(this.args[0]));
