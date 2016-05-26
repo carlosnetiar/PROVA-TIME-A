@@ -16,7 +16,7 @@
         <script src="${SUBDIR}/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js" type="text/javascript"></script>
         <script src="${SUBDIR}/js/tabela/jquery.tmpl.min.js" type="text/javascript"></script>
         <script src="${SUBDIR}/js/tabela/horariosAjax.js" type="text/javascript"></script>
-
+        <script src="${SUBDIR}/js/form/validar.js" type="text/javascript"></script>
         <script src="${SUBDIR}/assets/global/scripts/datatable.js" type="text/javascript"></script>
         <script src="${SUBDIR}/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
         <script src="${SUBDIR}/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
@@ -53,7 +53,7 @@
                                             <span class="input-group-addon">
 
                                             </span>
-                                            <input type="text" class="form-control" placeholder="" name="cpf"> </div>
+                                            <input type="text" class="form-control" placeholder="" name="cpf" onkeydown="validar(this,'num')"> </div>
                                     </div>
                                 </div>
 
