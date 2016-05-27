@@ -121,6 +121,7 @@ public class Horario extends Controller {
             String codigoCategoria = request.getParameter("categoria");
             String servico = request.getParameter("servico");
 
+            
             //BEAN RESPONSÁVEL POR ARMAZENAR OS DADOS DO USUÁRIO ATRAVÉS DO CPF
             UsuarioBean usuario = new UsuarioBean();
             usuario.setCpf_user(request.getParameter("cpf"));
@@ -135,7 +136,7 @@ public class Horario extends Controller {
                 request.setAttribute("erroMsg", Feedback.erroCategoria());
                 procurar();
 
-            } else if (dataDAO.listarHorariosDisponiveis(dataFormatada).isEmpty()) {
+            } else if (dataDAO.listarHorariosDisponiveis(dataFormatada, Integer.valueOf(codigoCategoria)).isEmpty()) {
 
                 //VALIDAÇÃO DO SISTEMA - VERIFICA SE EXISTE HORÁRIO DISPONÍVEL NESSA DATA
                 request.setAttribute("erroMsg", Feedback.erroData());
@@ -146,7 +147,7 @@ public class Horario extends Controller {
                 //ATRIBUTOS UTILIZADOS NA agendar/listar.jsp
                 request.getSession().setAttribute("servico", servico);
                 request.getSession().setAttribute("categoria", codigoCategoria);
-                request.setAttribute("datasDisponiveis", dataDAO.listarHorariosDisponiveis(dataFormatada));
+                request.setAttribute("datasDisponiveis", dataDAO.listarHorariosDisponiveis(dataFormatada, Integer.valueOf(codigoCategoria)));
                 request.getSession().setAttribute("usuario", usuarioDAO.carregarUser(usuario.getCpf_user()));
                 request.getRequestDispatcher("agendar/listar.jsp").forward(request, response);
 
@@ -188,8 +189,6 @@ public class Horario extends Controller {
             aluno = (UsuarioBean) request.getSession().getAttribute("usuario");
 
             //CHAMANDO OS METODOS DAO COM OS PARAMETROS PARA JDBC
-            //dataDAO.alterarStatus(Integer.valueOf(this.args[0]));
-            //agendaDAO.agendarAula(agendaBean);
             servicoBean = servicosDAO.servicoEspecifico(Integer.valueOf(request.getSession().getAttribute("servico").toString()));
             catServicoBean = servicosDAO.categoriaEspecifica(Integer.valueOf(request.getSession().getAttribute("categoria").toString()));
             dataBean = dataDAO.carregarDataEspecifica(Integer.valueOf(this.args[0]));

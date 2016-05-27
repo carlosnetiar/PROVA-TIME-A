@@ -6,6 +6,7 @@
 package br.com.siag.dao;
 
 import br.com.siag.beans.DataBean;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public interface DataDAO {
      * @param data
      * @return Lista de horários em dia específico
      */
-    List<DataBean>  listarHorariosDisponiveis(String data);
+    List<DataBean>  listarHorariosDisponiveis(String data, int cod_serv);
     
     /**
      * 
@@ -33,4 +34,10 @@ public interface DataDAO {
      * @return Data específica a partir do ID
      */
     DataBean        carregarDataEspecifica(int id);
+    
+    /**
+     * 
+     * @return Se a aula já estiver marcada ou não
+     */   
+    int             verificarStatus(Date dia, String hora, int cod_serv);
 }

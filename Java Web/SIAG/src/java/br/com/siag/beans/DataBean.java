@@ -18,6 +18,18 @@ public class DataBean{
     private Date  dia;
     private String  hora;
     private boolean status;
+    /**
+     * Verifica já horário está disponível
+     */
+    private Integer size;
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 
     public int getId_data_hora() {
         return id_data_hora;
