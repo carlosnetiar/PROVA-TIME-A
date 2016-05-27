@@ -54,7 +54,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="${SUBDIR}/assets/layouts/layout4/css/custom.min.css" rel="stylesheet" type="text/css" />
         <!-- END THEME LAYOUT STYLES -->
         <script type="text/javascript">GLOBAL_SUBDIR = "${SUBDIR}";</script>
-        <link rel="shortcut icon" href="${SUBDIR}/images/favicon.ico" />
+        <link rel="shortcut icon" href="${SUBDIR}/images/ICO.png" />
     </head>
     <!-- END HEAD -->
 
