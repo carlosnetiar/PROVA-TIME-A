@@ -196,10 +196,10 @@ public class Horario extends Controller {
             //RETORNANDO UMA MENSAGEM NA TELA SE OCORREU TUDO BEM
             if(dataDAO.alterarStatus(Integer.valueOf(this.args[0])) &&  agendaDAO.agendarAula(agendaBean)){
             request.setAttribute("erroMsg", Feedback.sucesso());
-            
+            /*
             //ENVIAR EMAIL DE CONFIRMAÇÃO DE AGENDAMENTO
             String corpo = Comprovante.corpoComprovante(aluno.getNome_user(), String.valueOf(dataBean.getDia()), dataBean.getHora(), catServicoBean.getNome_categoria(), servicoBean.getNome_servico());
-            FEmail.enviar("Marcus", aluno.getEmail_user(), "Comprovação de Agendamento - SIAG", corpo);
+            //FEmail.enviar("Marcus", aluno.getEmail_user(), "Comprovação de Agendamento - SIAG", corpo);
             procurar();
             
             }else{

@@ -45,7 +45,7 @@
                                 <td class="text-center">
                                     ${datas.dia}
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center col-sm-4">
                                     <a href="${SUBDIR}/Horario/confirmar/${datas.id_data_hora}/${usuario.id_user}/${categoria}/${servico}"><input type="button" class="btn green" value="Confirmar Agendamento"/></a>
                                 </td>
                             </tr>

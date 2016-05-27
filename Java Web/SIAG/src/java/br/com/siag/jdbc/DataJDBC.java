@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,6 @@ public class DataJDBC implements DataDAO {
         DataBean data;
         StringBuilder sql = new StringBuilder();
         ResultSet rs;
-
         sql.append("SELECT * FROM tbl_disponibilidade ");
         sql.append("WHERE dia='" + dataEspecifica + "'");
 
