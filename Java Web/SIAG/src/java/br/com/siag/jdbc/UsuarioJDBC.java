@@ -31,7 +31,7 @@ public class UsuarioJDBC implements UsuarioDAO{
     @Override
     public UsuarioBean carregarUser(String cpf) {
         PreparedStatement pst;
-        String sql = "SELECT * FROM tbl_aluno WHERE cpf_aluno='"+cpf+"'";
+        String sql = "SELECT * FROM tbl_aluno WHERE cpf_aluno='"+cpf+"' AND status='ATIVO'";
         ResultSet rs;
         UsuarioBean user = null;
         

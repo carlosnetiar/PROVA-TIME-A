@@ -48,9 +48,9 @@ public class DataJDBC implements DataDAO {
         ResultSet rs;
         TratarHora tratarHora = new TratarHora();
         sql.append("SELECT d.*, g.cod_catservico, u.codigo ");
-        sql.append("FROM sisagenda.tbl_disponibilidade as d, sisagenda.tbl_guiche as g,sisagenda.tbl_usuario as u ");
-        sql.append("WHERE g.codigo = d.cod_guiche AND d.status = 0 AND  g.cod_catservico='" + id_servico + "' AND dia='" + dataEspecifica + "'");
-        sql.append("GROUP BY g.cod_catservico");
+        sql.append("FROM tbl_disponibilidade as d, tbl_guiche as g, tbl_usuario as u ");
+        sql.append("WHERE g.codigo = d.cod_guiche AND g.codigo = u.cod_guiche AND d.status = 0 ");
+        sql.append("AND g.cod_catservico='"+id_servico+"' AND dia='"+dataEspecifica+"' GROUP BY d.hora");
 
         try {
             pst = conexao.prepareStatement(sql.toString());
@@ -66,7 +66,7 @@ public class DataJDBC implements DataDAO {
                     data.setHora(rs.getString("hora"));
                     data.setId_guiche(rs.getInt("cod_guiche"));
                     data.setId_atendente(rs.getInt("u.codigo"));
-                    System.out.println("JDBC:" + data.getId_guiche());
+                    System.out.println("JDBC:" + data.getId_atendente());
                     listDatas.add(data);
 
                 }
@@ -75,7 +75,7 @@ public class DataJDBC implements DataDAO {
             rs.close();
         } catch (SQLException ex) {
             System.out.println("ERRO AO LISTAR DATAS --- ERRO || " + ex);
-        } catch (ParseException ex) {
+        } catch (ParseException ex) { 
             Logger.getLogger(DataJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -87,12 +87,12 @@ public class DataJDBC implements DataDAO {
      * @param d
      * @return b
      * 
-     * MÉTODO RESPONSÁVEL POR ALTERAR O STATUS DO HORARIO | 0 = DESMARCADO | 1 = MARCADO
+     * MÉTODO RESPONSÁVEL POR ALTERAR O STATUS DO HORARIO | 0 = LIVRE | 1 = RESERVADO
      */
     @Override
     public boolean alterarStatus(int d) {
         PreparedStatement pst;
-        String sql = "UPDATE tbl_disponibilidade SET status=0 WHERE codigo='" + d + "'";
+        String sql = "UPDATE tbl_disponibilidade SET status=1 WHERE codigo='" + d + "'";
         boolean b;
         try {
             pst = conexao.prepareStatement(sql);
