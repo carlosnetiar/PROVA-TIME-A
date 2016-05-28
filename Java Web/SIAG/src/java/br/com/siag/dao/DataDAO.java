@@ -19,7 +19,7 @@ public interface DataDAO {
      * @param data
      * @return Lista de horários em dia específico
      */
-    List<DataBean>  listarHorariosDisponiveis(String data, int cod_serv);
+    List<DataBean>  listarHorariosDisponiveis(String data, int id_servico);
     
     /**
      * 
@@ -35,9 +35,4 @@ public interface DataDAO {
      */
     DataBean        carregarDataEspecifica(int id);
     
-    /**
-     * 
-     * @return Se a aula já estiver marcada ou não
-     */   
-    int             verificarStatus(Date dia, String hora, int cod_serv);
 }

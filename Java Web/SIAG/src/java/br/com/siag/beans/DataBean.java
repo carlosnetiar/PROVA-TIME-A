@@ -18,17 +18,24 @@ public class DataBean{
     private Date  dia;
     private String  hora;
     private boolean status;
-    /**
-     * Verifica já horário está disponível
-     */
-    private Integer size;
+    private Integer id_guiche;
+    private Integer id_atendente;
+    
 
-    public Integer getSize() {
-        return size;
+    public Integer getId_atendente() {
+        return id_atendente;
     }
 
-    public void setSize(Integer size) {
-        this.size = size;
+    public void setId_atendente(Integer id_atendente) {
+        this.id_atendente = id_atendente;
+    }
+    
+    public Integer getId_guiche() {
+        return id_guiche;
+    }
+
+    public void setId_guiche(Integer id_guiche) {
+        this.id_guiche = id_guiche;
     }
 
     public int getId_data_hora() {

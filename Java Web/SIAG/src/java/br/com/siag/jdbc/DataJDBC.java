@@ -7,14 +7,18 @@ package br.com.siag.jdbc;
 
 import br.com.siag.beans.DataBean;
 import br.com.siag.dao.DataDAO;
+import br.com.siag.util.TratarHora;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,46 +33,62 @@ public class DataJDBC implements DataDAO {
     }
 
     /**
-     * 
+     *
      * @param dataEspecifica
      * @param i
-     * @return RETORNA OS HORÁRIOS ESPECÍFICOS JÁ FAZENDO AVALIAÇÃO SE ESTÃO MARCADOS OU NÃO
+     * @return RETORNA OS HORÁRIOS ESPECÍFICOS JÁ FAZENDO AVALIAÇÃO SE ESTÃO
+     * MARCADOS OU NÃO
      */
     @Override
-    public List<DataBean> listarHorariosDisponiveis(String dataEspecifica, int i) {
+    public List<DataBean> listarHorariosDisponiveis(String dataEspecifica, int id_servico) {
         PreparedStatement pst;
         List<DataBean> listDatas = new ArrayList<>();
         DataBean data;
         StringBuilder sql = new StringBuilder();
         ResultSet rs;
-        sql.append("SELECT * FROM tbl_disponibilidade ");
-        sql.append("WHERE dia='" + dataEspecifica + "'");
+        TratarHora tratarHora = new TratarHora();
+        sql.append("SELECT d.*, g.cod_catservico, u.codigo ");
+        sql.append("FROM sisagenda.tbl_disponibilidade as d, sisagenda.tbl_guiche as g,sisagenda.tbl_usuario as u ");
+        sql.append("WHERE g.codigo = d.cod_guiche AND d.status = 0 AND  g.cod_catservico='" + id_servico + "' AND dia='" + dataEspecifica + "'");
+        sql.append("GROUP BY g.cod_catservico");
 
         try {
             pst = conexao.prepareStatement(sql.toString());
             rs = pst.executeQuery();
             while (rs.next()) {
                 data = new DataBean();
-                
                 /**
-                 * VERIFICA SE JÁ EXISTE UM HORÁRIO MARCADO NAQUELE SERVIÇO
+                 * FAZ A COMPARAÇÃO COM A HORA DO SISTEMA E A HORA DO BANCO DE DADOS, PRA NÃO PEGAR DATAS QUE JÁ PASSARAM
                  */
-                if (verificarStatus(rs.getDate("dia"), rs.getString("hora"), i) == 0) {
+                if (tratarHora.tratarHora(tratarHora.getHoraSys()).before(tratarHora.tratarHora(rs.getString("hora")))) {
                     data.setDia(rs.getDate("dia"));
                     data.setId_data_hora(rs.getInt("codigo"));
                     data.setHora(rs.getString("hora"));
+                    data.setId_guiche(rs.getInt("cod_guiche"));
+                    data.setId_atendente(rs.getInt("u.codigo"));
+                    System.out.println("JDBC:" + data.getId_guiche());
                     listDatas.add(data);
+
                 }
             }
             pst.close();
             rs.close();
         } catch (SQLException ex) {
             System.out.println("ERRO AO LISTAR DATAS --- ERRO || " + ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(DataJDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return listDatas;
     }
 
+    /**
+     * 
+     * @param d
+     * @return b
+     * 
+     * MÉTODO RESPONSÁVEL POR ALTERAR O STATUS DO HORARIO | 0 = DESMARCADO | 1 = MARCADO
+     */
     @Override
     public boolean alterarStatus(int d) {
         PreparedStatement pst;
@@ -86,6 +106,12 @@ public class DataJDBC implements DataDAO {
         return b;
     }
 
+    /**
+     * 
+     * @param id
+     * @return DataBean
+     * 
+     */
     @Override
     public DataBean carregarDataEspecifica(int id) {
         PreparedStatement pst;
@@ -111,36 +137,5 @@ public class DataJDBC implements DataDAO {
         }
 
         return dataBean;
-    }
-
-    @Override
-    public int verificarStatus(Date dia, String hora, int cod_serv) {
-        PreparedStatement pst;
-        StringBuilder sql = new StringBuilder();
-        ResultSet rs;
-        int count = 0;
-
-        sql.append("SELECT count(*) As size,ds.dia, ds.hora, ag.cod_servico, se.nome_servico, cs.nome_cat ");
-        sql.append("FROM tbl_agendamento ag ");
-        sql.append("INNER JOIN tbl_disponibilidade ds ON (ag.cod_dia=ds.codigo) ");
-        sql.append("INNER JOIN tbl_servico se ON (ag.cod_servico=se.codigo) ");
-        sql.append("INNER JOIN tbl_cat_servico cs ON (se.tipo_cat = cs.codigo) ");
-        sql.append("WHERE ds.dia='" + dia + "' AND ds.hora='" + hora + "' AND cs.codigo='" + cod_serv + "'");
-        
-
-        try {
-            pst = conexao.prepareStatement(sql.toString());
-            rs = pst.executeQuery();
-
-            if (rs.next()) {
-                count = rs.getInt("size");
-            }
-            pst.close();
-            rs.close();
-        } catch (SQLException ex) {
-            System.out.println("ERRO AO VERIFICAR STATUS --- ERRO || " + ex);
-        }
-
-        return count;
     }
 }

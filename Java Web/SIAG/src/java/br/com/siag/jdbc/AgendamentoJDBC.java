@@ -30,13 +30,15 @@ public class AgendamentoJDBC implements AgendamentoDAO {
     public boolean agendarAula(AgendaBean agendamento) {
         PreparedStatement pst;
         StringBuilder sql = new StringBuilder();
-        sql.append("INSERT INTO tbl_agendamento (cod_aluno,cod_dia,cod_servico) VALUES(?,?,?)");
+        sql.append("INSERT INTO tbl_agendamento (cod_aluno,cod_dia,cod_servico,cod_guiche, cod_atendente) VALUES(?,?,?,?,?)");
         boolean b;
         try {
             pst = conexao.prepareStatement(sql.toString());
             pst.setInt(1, agendamento.getId_usuario());
             pst.setInt(2, agendamento.getId_dia());
             pst.setInt(3, agendamento.getServico());
+            pst.setInt(4, agendamento.getGuiche());
+            pst.setInt(5, agendamento.getId_atendente());
             pst.execute();
             b = true;
         } catch (SQLException ex) {

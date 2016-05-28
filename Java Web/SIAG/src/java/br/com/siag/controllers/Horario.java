@@ -186,6 +186,8 @@ public class Horario extends Controller {
             agendaBean.setId_dia(Integer.valueOf(this.args[0]));
             agendaBean.setCat_servico(Integer.valueOf(this.args[2]));
             agendaBean.setServico(Integer.valueOf(this.args[3]));
+            agendaBean.setGuiche(Integer.valueOf(this.args[4]));
+            agendaBean.setId_atendente(Integer.valueOf(this.args[5]));
             aluno = (UsuarioBean) request.getSession().getAttribute("usuario");
 
             //CHAMANDO OS METODOS DAO COM OS PARAMETROS PARA JDBC

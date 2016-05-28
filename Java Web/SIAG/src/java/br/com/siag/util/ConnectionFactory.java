@@ -8,12 +8,12 @@ public class ConnectionFactory {
     
     public static Connection getConnection() throws ClassNotFoundException{  
         String driver = "com.mysql.jdbc.Driver";
-        //String user = "sisagenda";
-        //String pwd = "s1s4g3nd4";
-        //String url    = "jdbc:mysql://179.188.16.12:3306/sisagenda";
-        String url      = "jdbc:mysql://localhost:3306/sisagenda";
-        String user     = "root";
-        String pwd      = "sql123";
+        String user = "sisagenda";
+        String pwd = "s1s4g3nd4";
+        String url    = "jdbc:mysql://179.188.16.12:3306/sisagenda";
+        //String url      = "jdbc:mysql://localhost:3306/sisagenda";
+        //String user     = "root";
+        //String pwd      = "sql123";
         
         try {
             Class.forName(driver);
