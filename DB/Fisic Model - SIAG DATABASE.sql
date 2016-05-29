@@ -22,28 +22,14 @@ USE `sisagenda` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_aluno` (
   `codigo` INT(11) NOT NULL AUTO_INCREMENT,
-  `nome_aluno` VARCHAR(100) CHARACTER SET 'latin1' NOT NULL,
-  `cpf_aluno` VARCHAR(11) CHARACTER SET 'latin1' NOT NULL,
-  `tel_aluno` VARCHAR(15) CHARACTER SET 'latin1' NULL DEFAULT NULL,
-  `email_aluno` VARCHAR(50) CHARACTER SET 'latin1' NULL DEFAULT NULL,
+  `nome_aluno` VARCHAR(100) CHARACTER SET 'utf8' NOT NULL,
+  `cpf_aluno` VARCHAR(11) CHARACTER SET 'utf8' NOT NULL,
+  `tel_aluno` VARCHAR(15) CHARACTER SET 'utf8' NULL DEFAULT NULL,
+  `email_aluno` VARCHAR(50) CHARACTER SET 'utf8' NULL DEFAULT NULL,
+  `status` ENUM('ATIVO', 'INATIVO') CHARACTER SET 'latin1' NOT NULL DEFAULT 'ATIVO',
   PRIMARY KEY (`codigo`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 759
-DEFAULT CHARACTER SET = latin1
-COLLATE = latin1_general_ci;
-
-
--- -----------------------------------------------------
--- Table `sisagenda`.`tbl_disponibilidade`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_disponibilidade` (
-  `codigo` INT(11) NOT NULL AUTO_INCREMENT,
-  `dia` DATE NOT NULL,
-  `hora` VARCHAR(15) NOT NULL,
-  `status` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`codigo`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 169
+AUTO_INCREMENT = 769
 DEFAULT CHARACTER SET = latin1
 COLLATE = latin1_general_ci;
 
@@ -53,10 +39,10 @@ COLLATE = latin1_general_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_cat_servico` (
   `codigo` INT(11) NOT NULL AUTO_INCREMENT,
-  `nome_cat` VARCHAR(45) CHARACTER SET 'latin1' NULL DEFAULT NULL,
+  `nome_cat` VARCHAR(45) CHARACTER SET 'utf8' NULL DEFAULT NULL,
   PRIMARY KEY (`codigo`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = latin1
 COLLATE = latin1_general_ci;
 
@@ -76,6 +62,30 @@ CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_guiche` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 11
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `sisagenda`.`tbl_disponibilidade`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_disponibilidade` (
+  `codigo` INT(11) NOT NULL AUTO_INCREMENT,
+  `dia` DATE NOT NULL,
+  `hora` VARCHAR(15) CHARACTER SET 'latin1' NOT NULL,
+  `status` TINYINT(1) NOT NULL,
+  `cod_guiche` INT(11) NOT NULL,
+  PRIMARY KEY (`codigo`),
+  UNIQUE INDEX `dia` (`dia` ASC, `hora` ASC, `cod_guiche` ASC),
+  INDEX `fk_tbl_disponibilidade_tbl_guiche1_idx` (`cod_guiche` ASC),
+  CONSTRAINT `fk_tbl_disponibilidade_tbl_guiche1`
+    FOREIGN KEY (`cod_guiche`)
+    REFERENCES `sisagenda`.`tbl_guiche` (`codigo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 222
 DEFAULT CHARACTER SET = latin1
 COLLATE = latin1_general_ci;
 
@@ -85,11 +95,13 @@ COLLATE = latin1_general_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_usuario` (
   `codigo` INT(11) NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(90) CHARACTER SET 'latin1' NOT NULL,
-  `cpf` VARCHAR(11) NOT NULL,
+  `nome` VARCHAR(90) CHARACTER SET 'utf8' NOT NULL,
+  `cpf` VARCHAR(11) CHARACTER SET 'latin1' NOT NULL,
   `data_nascimento` DATE NOT NULL,
   `cod_guiche` INT(11) NOT NULL,
+  `enm_tipo` ENUM('ATEND', 'SUPER') CHARACTER SET 'latin1' NOT NULL DEFAULT 'ATEND',
   PRIMARY KEY (`codigo`),
+  UNIQUE INDEX `cpf` (`cpf` ASC),
   INDEX `fk_tbl_atendente_tbl_guiche1_idx` (`cod_guiche` ASC),
   CONSTRAINT `fk_tbl_atendente_tbl_guiche1`
     FOREIGN KEY (`cod_guiche`)
@@ -97,6 +109,7 @@ CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_usuario` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = latin1
 COLLATE = latin1_general_ci;
 
@@ -107,7 +120,7 @@ COLLATE = latin1_general_ci;
 CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_servico` (
   `codigo` INT(11) NOT NULL AUTO_INCREMENT,
   `tipo_cat` INT(11) NOT NULL,
-  `nome_servico` VARCHAR(120) CHARACTER SET 'latin1' NOT NULL,
+  `nome_servico` VARCHAR(120) CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`codigo`),
   INDEX `fk_tbl_servico_tbl_cat_servico1_idx` (`tipo_cat` ASC),
   CONSTRAINT `fk_tbl_servico_tbl_cat_servico1`
@@ -116,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_servico` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 17
+AUTO_INCREMENT = 18
 DEFAULT CHARACTER SET = latin1
 COLLATE = latin1_general_ci;
 
@@ -129,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_agendamento` (
   `cod_aluno` INT(11) NULL DEFAULT NULL,
   `cod_dia` INT(11) NULL DEFAULT NULL,
   `cod_atendente` INT(11) NULL DEFAULT NULL,
-  `cod_servico` INT(11) NOT NULL,
+  `cod_servico` INT(11) NULL DEFAULT NULL,
   `cod_guiche` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`codigo`),
   INDEX `fk_aluno_idx` (`cod_aluno` ASC),
@@ -163,9 +176,45 @@ CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_agendamento` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 39
+AUTO_INCREMENT = 67
 DEFAULT CHARACTER SET = latin1
 COLLATE = latin1_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `sisagenda`.`tbl_ead_conteudo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_ead_conteudo` (
+  `codigo` INT(11) NOT NULL AUTO_INCREMENT,
+  `titulo` VARCHAR(255) NOT NULL,
+  `datatime` DATETIME NOT NULL,
+  `descricao` TEXT NOT NULL,
+  `enum_tipo` ENUM('BLOG', 'GALERIA', 'BEG', 'HTML', 'TXT', 'PHP', 'SLIDESHOW') NOT NULL DEFAULT 'BLOG',
+  `status` ENUM('PRIVATE', 'PUBLIC', 'HIDE') NOT NULL,
+  `show_menu` ENUM('SIM', 'NAO') NOT NULL,
+  `hits_acessos` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`codigo`))
+ENGINE = MyISAM
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `sisagenda`.`tbl_ead_conteudo_itens`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_ead_conteudo_itens` (
+  `codigo` INT(11) NOT NULL AUTO_INCREMENT,
+  `codigo_link` INT(11) NOT NULL,
+  `ordem_item` INT(11) NOT NULL,
+  `data_publicacao` DATETIME NOT NULL,
+  `enum_tipo` ENUM('HTML', 'IMG', 'VIDEO', 'TXT') NOT NULL,
+  `subtitulo` VARCHAR(255) NOT NULL,
+  `descricao` TEXT NOT NULL,
+  `html_tags` LONGTEXT NOT NULL,
+  PRIMARY KEY (`codigo`))
+ENGINE = MyISAM
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -176,8 +225,9 @@ CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_feedback` (
   `cod_agendamento` INT(11) NULL DEFAULT NULL,
   `opiniao` VARCHAR(125) CHARACTER SET 'latin1' NULL DEFAULT NULL,
   `nota` INT(11) NULL DEFAULT NULL,
-  `origem` ENUM('user', 'aluno') NULL DEFAULT 'user',
+  `origem` ENUM('user', 'aluno') CHARACTER SET 'latin1' NULL DEFAULT 'user',
   PRIMARY KEY (`codigo`),
+  UNIQUE INDEX `cod_agendamento` (`cod_agendamento` ASC, `origem` ASC),
   INDEX `fk_feedback_idx` (`cod_agendamento` ASC),
   CONSTRAINT `fk_feedback`
     FOREIGN KEY (`cod_agendamento`)
@@ -185,6 +235,7 @@ CREATE TABLE IF NOT EXISTS `sisagenda`.`tbl_feedback` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT = 12
 DEFAULT CHARACTER SET = latin1
 COLLATE = latin1_general_ci;
 
