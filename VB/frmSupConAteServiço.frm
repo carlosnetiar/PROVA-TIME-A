@@ -1,14 +1,19 @@
 VERSION 5.00
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmSupConAteServiço 
+   BorderStyle     =   3  'Fixed Dialog
    Caption         =   "SIAG"
    ClientHeight    =   5040
-   ClientLeft      =   120
-   ClientTop       =   450
+   ClientLeft      =   45
+   ClientTop       =   375
    ClientWidth     =   7050
    LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MDIChild        =   -1  'True
+   MinButton       =   0   'False
    ScaleHeight     =   5040
    ScaleWidth      =   7050
-   StartUpPosition =   3  'Windows Default
+   ShowInTaskbar   =   0   'False
    Begin VB.Frame frarelatorio 
       Caption         =   "Relatório"
       Height          =   4815
@@ -16,18 +21,23 @@ Begin VB.Form frmSupConAteServiço
       TabIndex        =   0
       Top             =   120
       Width           =   6735
+      Begin MSComCtl2.DTPicker DTPickerRelatorio 
+         Height          =   375
+         Left            =   960
+         TabIndex        =   9
+         Top             =   2040
+         Width           =   1815
+         _ExtentX        =   3201
+         _ExtentY        =   661
+         _Version        =   393216
+         Format          =   94437377
+         CurrentDate     =   42517
+      End
       Begin VB.ComboBox comSupConAteSerHora 
          Height          =   315
          Left            =   960
-         TabIndex        =   9
-         Top             =   2640
-         Width           =   1815
-      End
-      Begin VB.ComboBox comSupAteSerDia 
-         Height          =   315
-         Left            =   960
          TabIndex        =   8
-         Top             =   2040
+         Top             =   2640
          Width           =   1815
       End
       Begin VB.ComboBox comservico 
@@ -62,6 +72,7 @@ Begin VB.Form frmSupConAteServiço
       End
       Begin VB.Label lbldia 
          Caption         =   "Dia"
+         ForeColor       =   &H000000FF&
          Height          =   375
          Left            =   240
          TabIndex        =   6
@@ -78,6 +89,7 @@ Begin VB.Form frmSupConAteServiço
       End
       Begin VB.Label lblnome 
          Caption         =   "Nome"
+         ForeColor       =   &H000000FF&
          Height          =   255
          Left            =   240
          TabIndex        =   1
@@ -93,11 +105,20 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Label1_Click()
 End Sub
-
-Private Sub Data1_Validate(Action As Integer, Save As Integer)
-
+Private Sub Salvar()
+    If FG_ValidaForm(Me) Then
+    End If
 End Sub
 
-Private Sub frarelatorio_DragDrop(Source As Control, X As Single, Y As Single)
+Private Sub Form_Load()
+    comSupConAteSerHora.AddItem "09:00", 0
+    comSupConAteSerHora.AddItem "10:00", 1
+    comSupConAteSerHora.AddItem "11:00", 2
+    comSupConAteSerHora.AddItem "12:00", 3
+    comSupConAteSerHora.AddItem "14:00", 4
+    comSupConAteSerHora.AddItem "15:00", 5
+    comSupConAteSerHora.AddItem "16:00", 6
+    comSupConAteSerHora.AddItem "17:00", 7
+    comSupConAteSerHora.AddItem "18:00", 8
 
 End Sub

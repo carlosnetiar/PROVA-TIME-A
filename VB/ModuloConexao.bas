@@ -6,7 +6,6 @@ On Error GoTo Tratamento
     abrirconexao.CursorLocation = adUseClient
     abrirconexao.ConnectionString = stringconexao
     abrirconexao.Open
-    
     Exit Function
 Tratamento:
     Set abrirconexao = Nothing
@@ -14,12 +13,13 @@ Tratamento:
     
 End Function
 
-
+    
 Sub Main()
-    Set adosisagenda = abrirconexao("DRIVER={MySQL ODBC 3.51 Driver};SERVER=179.188.16.12;DATABASE=sisagenda;UID=sisagenda;PWD=s1s4g3nd4; OPTION=3")
+    Set adosisagenda = abrirconexao("DRIVER={MySQL ODBC 3.51 Driver};SERVER=localhost;DATABASE=sisagenda;UID=root;PWD=123456; OPTION=3")
     If (adosisagenda Is Nothing) Then
         MsgBox "Não foi possível abrir a conexão com o Banco de Dados", vbInformation + vbOKOnly + vbApplicationModal, "sisagenda"
         End
     End If
+    
     frmSplash.Show
 End Sub
