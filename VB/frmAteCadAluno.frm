@@ -1,15 +1,20 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.Form frmAteCadAluno 
+   BorderStyle     =   3  'Fixed Dialog
    Caption         =   "SIAG"
    ClientHeight    =   4425
-   ClientLeft      =   120
-   ClientTop       =   450
+   ClientLeft      =   45
+   ClientTop       =   375
    ClientWidth     =   8295
    LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MDIChild        =   -1  'True
+   MinButton       =   0   'False
+   PaletteMode     =   1  'UseZOrder
    ScaleHeight     =   4425
    ScaleWidth      =   8295
-   StartUpPosition =   3  'Windows Default
+   ShowInTaskbar   =   0   'False
    Begin ComctlLib.Toolbar tooAteCadAluIcone 
       Align           =   1  'Align Top
       Height          =   630
@@ -26,18 +31,22 @@ Begin VB.Form frmAteCadAluno
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
          NumButtons      =   4
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "NOVO"
             Object.Tag             =   "Novo"
             ImageIndex      =   1
          EndProperty
          BeginProperty Button2 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Object.Tag             =   "Editar"
+            Key             =   "ABRIR"
+            Object.Tag             =   "Abrir"
             ImageIndex      =   2
          EndProperty
          BeginProperty Button3 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "SALVAR"
             Object.Tag             =   "Salvar"
             ImageIndex      =   3
          EndProperty
          BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "SAIR"
             Object.Tag             =   "Sair"
             ImageIndex      =   4
          EndProperty
@@ -45,6 +54,7 @@ Begin VB.Form frmAteCadAluno
    End
    Begin VB.Frame fraAteCadAluno 
       Caption         =   "Cadastro de Aluno"
+      ForeColor       =   &H00000000&
       Height          =   3615
       Left            =   120
       TabIndex        =   0
@@ -54,6 +64,7 @@ Begin VB.Form frmAteCadAluno
          Height          =   375
          Left            =   1320
          TabIndex        =   8
+         Tag             =   "OBRIGATORIO"
          Top             =   2640
          Width           =   4215
       End
@@ -61,6 +72,7 @@ Begin VB.Form frmAteCadAluno
          Height          =   405
          Left            =   1320
          TabIndex        =   7
+         Tag             =   "OBRIGATORIO"
          Top             =   1920
          Width           =   2415
       End
@@ -68,6 +80,7 @@ Begin VB.Form frmAteCadAluno
          Height          =   405
          Left            =   1320
          TabIndex        =   6
+         Tag             =   "OBRIGATORIO"
          Top             =   1200
          Width           =   2655
       End
@@ -75,6 +88,7 @@ Begin VB.Form frmAteCadAluno
          Height          =   375
          Left            =   1320
          TabIndex        =   5
+         Tag             =   "OBRIGATORIO"
          Top             =   480
          Width           =   5055
       End
@@ -110,6 +124,7 @@ Begin VB.Form frmAteCadAluno
       End
       Begin VB.Label lblemail 
          Caption         =   "E-mail"
+         ForeColor       =   &H000000FF&
          Height          =   255
          Left            =   360
          TabIndex        =   4
@@ -118,6 +133,7 @@ Begin VB.Form frmAteCadAluno
       End
       Begin VB.Label lbltelefone 
          Caption         =   "Telefone"
+         ForeColor       =   &H000000FF&
          Height          =   375
          Left            =   360
          TabIndex        =   3
@@ -126,6 +142,7 @@ Begin VB.Form frmAteCadAluno
       End
       Begin VB.Label lblpf 
          Caption         =   "CPF"
+         ForeColor       =   &H000000FF&
          Height          =   255
          Left            =   360
          TabIndex        =   2
@@ -134,6 +151,7 @@ Begin VB.Form frmAteCadAluno
       End
       Begin VB.Label lblnome 
          Caption         =   "Nome"
+         ForeColor       =   &H000000FF&
          Height          =   375
          Left            =   360
          TabIndex        =   1
@@ -147,20 +165,49 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Private Sub fraAteCadAluno_DragDrop(Source As Control, X As Single, Y As Single)
+ Option Explicit
 
+Private Sub novo()
+    Call PG_LimpaForm(Me, txtAteCadAluNome)
 End Sub
 
+
 Private Sub tooAteCadAluIcone_ButtonClick(ByVal Button As ComctlLib.Button)
-Select Case Button.Index
-        Case 1
-            'Novo Arquivo
-        Case 2
+Select Case Button.Key
+        Case "NOVO"
+            novo
+        Case "ABRIR"
             'Abrir arquivo
-        Case 3
-            'Insert
-        Case 4
+        Case "SALVAR"
+        
+            Dim adosisagenda As ADODB.Recordset
+            Dim sql As String
+            
+            sql = "insert into tbl_aluno (cpf_aluno, nome_aluno, tel_aluno, email_aluno) values (" _
+            & "'" & txtAteCadAluCPF.Text & "'," _
+            & "'" & txtAteCadAluNome.Text & "'," _
+            & "'" & txtAteCadAluTelefone.Text & "'," _
+            & "'" & txtAteCadAluEmail.Text & "')"
+            
+            Set adosisagenda = abrirconexao("DRIVER={MySQL ODBC 3.51 Driver};SERVER=localhost;DATABASE=sisagenda;UID=root;PWD=123456; OPTION=3").Execute(sql)
+            
+                      
+            MsgBox "Cadastro Concluído ! GRAÇAS A DEUS", vbInformation + vbOKOnly, App.Title
+
+        Case "SAIR"
             Unload frmAteCadAluno
     End Select
 End Sub
 
+Private Sub txtAteCadAluCPF_KeyPress(KeyAscii As Integer)
+    KeyAscii = FG_BloqueiaTeclado(CG_BLOQUEIATECLADO_SOMENTENUMEROS, KeyAscii)
+End Sub
+
+Private Sub txtAteCadAluTelefone_KeyPress(KeyAscii As Integer)
+    KeyAscii = FG_BloqueiaTeclado(CG_BLOQUEIATECLADO_SOMENTENUMEROS, KeyAscii)
+End Sub
+
+Private Sub Salvar()
+    If FG_ValidaForm(Me) Then
+    End If
+End Sub

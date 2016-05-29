@@ -1,20 +1,25 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmAteCadHorario 
+   BorderStyle     =   3  'Fixed Dialog
    Caption         =   "SIAG"
    ClientHeight    =   4155
-   ClientLeft      =   120
-   ClientTop       =   450
+   ClientLeft      =   45
+   ClientTop       =   375
    ClientWidth     =   7845
    LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MDIChild        =   -1  'True
+   MinButton       =   0   'False
    ScaleHeight     =   4155
    ScaleWidth      =   7845
-   StartUpPosition =   3  'Windows Default
+   ShowInTaskbar   =   0   'False
    Begin ComctlLib.Toolbar tooAteCadHorIcone 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   0
       Width           =   7845
       _ExtentX        =   13838
@@ -51,24 +56,43 @@ Begin VB.Form frmAteCadHorario
       TabIndex        =   0
       Top             =   720
       Width           =   7455
-      Begin VB.ComboBox comAteCadHorHora 
-         Height          =   315
+      Begin MSComCtl2.DTPicker DTPickerCadHor 
+         BeginProperty DataFormat 
+            Type            =   0
+            Format          =   "yyyy-MM-dd"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1046
+            SubFormatType   =   0
+         EndProperty
+         Height          =   375
          Left            =   1200
-         TabIndex        =   8
-         Top             =   2520
-         Width           =   1695
+         TabIndex        =   9
+         Tag             =   "OBRIGATORIO"
+         Top             =   1680
+         Width           =   2295
+         _ExtentX        =   4048
+         _ExtentY        =   661
+         _Version        =   393216
+         CustomFormat    =   "yyyy-MM-dd"
+         Format          =   93978627
+         CurrentDate     =   42517
+         MaxDate         =   2958457
       End
-      Begin VB.ComboBox comAteCadHorData 
+      Begin VB.ComboBox cbxHora 
          Height          =   315
          Left            =   1200
          TabIndex        =   7
-         Top             =   1800
-         Width           =   2175
+         Tag             =   "OBRIGATORIO"
+         Top             =   2280
+         Width           =   1695
       End
       Begin VB.TextBox txtAteCadHorCPF 
          Height          =   375
          Left            =   1200
          TabIndex        =   6
+         Tag             =   "2RWERWERWERWERWE"
          Top             =   1080
          Width           =   2415
       End
@@ -76,6 +100,7 @@ Begin VB.Form frmAteCadHorario
          Height          =   405
          Left            =   1200
          TabIndex        =   5
+         Tag             =   "OBRIGATORIO"
          Top             =   480
          Width           =   4455
       End
@@ -111,22 +136,25 @@ Begin VB.Form frmAteCadHorario
       End
       Begin VB.Label lblAteCadHorHora 
          Caption         =   "Hora"
+         ForeColor       =   &H000000FF&
          Height          =   255
          Left            =   360
          TabIndex        =   4
-         Top             =   2520
+         Top             =   2280
          Width           =   615
       End
       Begin VB.Label lblAteCadHorData 
          Caption         =   "Data"
+         ForeColor       =   &H000000FF&
          Height          =   255
          Left            =   360
          TabIndex        =   3
-         Top             =   1920
+         Top             =   1800
          Width           =   495
       End
       Begin VB.Label lblAteCadHorCPF 
          Caption         =   "CPF"
+         ForeColor       =   &H00000000&
          Height          =   255
          Left            =   360
          TabIndex        =   2
@@ -135,6 +163,7 @@ Begin VB.Form frmAteCadHorario
       End
       Begin VB.Label lblAteCadHorNome 
          Caption         =   "Nome"
+         ForeColor       =   &H00000000&
          Height          =   255
          Left            =   360
          TabIndex        =   1
@@ -148,25 +177,58 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Private Sub btoAteCadHorSalvar_Click()
-    MsgBox "Salvo com Sucesso", vbInformation, "SIAG"
+Option Explicit
+
+Private Sub novo()
+    Call PG_LimpaForm(Me, txtAteCadHorNome)
 End Sub
-
-
-Private Sub fraAteCadHorario_DragDrop(Source As Control, X As Single, Y As Single)
+Private Sub Form_Load()
+    cbxHora.AddItem "09:00", 0
+    cbxHora.AddItem "10:00", 1
+    cbxHora.AddItem "11:00", 2
+    cbxHora.AddItem "12:00", 3
+    cbxHora.AddItem "14:00", 4
+    cbxHora.AddItem "15:00", 5
+    cbxHora.AddItem "16:00", 6
+    cbxHora.AddItem "17:00", 7
+    cbxHora.AddItem "18:00", 8
 
 End Sub
 
 Private Sub tooAteCadHorIcone_ButtonClick(ByVal Button As ComctlLib.Button)
 Select Case Button.Index
         Case 1
-            'Novo Arquivo
+            novo
         Case 2
             'Abrir arquivo
         Case 3
-            'Insert
+            Dim adosisagenda As ADODB.Recordset
+            Dim sql As String
+            Dim dia As String
+            Dim mes As String
+            Dim ano As String
+            Dim data As Date
+            dia = DTPickerCadHor.Day
+            mes = DTPickerCadHor.Month
+            ano = DTPickerCadHor.Year
+            data = DTPickerCadHor.Value
+            
+            MsgBox (data)
         Case 4
             Unload frmAteCadHorario
     End Select
+End Sub
+
+Private Sub txtAteCadHorCPF_KeyPress(KeyAscii As Integer)
+    KeyAscii = FG_BloqueiaTeclado(CG_BLOQUEIATECLADO_SOMENTENUMEROS, KeyAscii)
+End Sub
+
+Private Sub txtAteCadHorTelefone_KeyPress(KeyAscii As Integer)
+    KeyAscii = FG_BloqueiaTeclado(CG_BLOQUEIATECLADO_SOMENTENUMEROS, KeyAscii)
+End Sub
+
+Private Sub Salvar()
+    If FG_ValidaForm(Me) Then
+    End If
 End Sub
 

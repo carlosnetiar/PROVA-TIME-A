@@ -2,11 +2,13 @@ VERSION 5.00
 Begin VB.MDIForm frmSIAGAgendamento 
    BackColor       =   &H80000018&
    Caption         =   "SIAG"
-   ClientHeight    =   7815
+   ClientHeight    =   7455
    ClientLeft      =   225
-   ClientTop       =   855
+   ClientTop       =   555
    ClientWidth     =   15105
+   Icon            =   "frmSIAGAgendamento.frx":0000
    LinkTopic       =   "MDIForm1"
+   Picture         =   "frmSIAGAgendamento.frx":000C
    StartUpPosition =   1  'CenterOwner
    WindowState     =   2  'Maximized
    Begin VB.Menu mnuSupervisor 
@@ -78,18 +80,6 @@ Attribute VB_Exposed = False
 Public adosisagenda As ADODB.Connection
 Public rstabela   As ADODB.Recordset
 
-Private Sub MDIForm_Load()
-Set adosisagenda = New ADODB.Connection
-    adosisagenda.CursorLocation = adUseClient
-    adosisagenda.ConnectionString = "Driver={Mysql ODBC 3.51 Driver}; Server=179.188.16.12;port=3306; database=sisagenda; user=sisagenda; password=s1s4g3nd4; option=3;"
-    adosisagenda.Open
-    
-    If adosisagenda.State = adStateOpen Then
-    MsgBox "Conectado ao banco de dados"
-    End If
-    
-End Sub
-
 Private Sub mnuAteCadAluno_Click(Index As Integer)
     frmAteCadAluno.Show
 End Sub
@@ -100,7 +90,7 @@ End Sub
 
 Private Sub mnuSair_Click(Index As Integer)
     Dim vResposta As Integer
-    vResposta = MsgBox("Certeza que deseja sair?", vbYesNo + vbQuestion, "Sair")
+    vResposta = MsgBox("Deseja sair do sistema?", vbYesNo + vbQuestion, "SIAG")
     If vResposta = vbYes Then End
 End Sub
 

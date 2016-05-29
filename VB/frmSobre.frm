@@ -1,14 +1,18 @@
 VERSION 5.00
 Begin VB.Form frmSobre 
+   BorderStyle     =   3  'Fixed Dialog
    Caption         =   "SIAG"
    ClientHeight    =   4140
-   ClientLeft      =   120
-   ClientTop       =   450
+   ClientLeft      =   45
+   ClientTop       =   375
    ClientWidth     =   5865
    LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MDIChild        =   -1  'True
+   MinButton       =   0   'False
    ScaleHeight     =   4140
    ScaleWidth      =   5865
-   StartUpPosition =   3  'Windows Default
+   ShowInTaskbar   =   0   'False
    Begin VB.Frame fraSobre 
       Caption         =   "Curiosidade"
       Height          =   3855
