@@ -82,8 +82,8 @@
                         <thead>
                             <tr>
                                 <th>Horário</th>
-                                <th>Nome</th>
-                                <th>Data</th>
+                                <th class="text-center">Nome</th>
+                                <th class="text-center">Data</th>
                             </tr>
                         </thead>
                         <tbody id="bodyTable">

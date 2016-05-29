@@ -140,6 +140,7 @@ public class Horario extends Controller {
 
                 //VALIDAÇÃO DO SISTEMA - VERIFICA SE EXISTE HORÁRIO DISPONÍVEL NESSA DATA
                 request.setAttribute("erroMsg", Feedback.erroData());
+                System.out.println(dataFormatada);
                 procurar();
 
             } else {
@@ -201,7 +202,7 @@ public class Horario extends Controller {
             
             //ENVIAR EMAIL DE CONFIRMAÇÃO DE AGENDAMENTO
             String corpo = Comprovante.corpoComprovante(aluno.getNome_user(), String.valueOf(dataBean.getDia()), dataBean.getHora(), catServicoBean.getNome_categoria(), servicoBean.getNome_servico());
-            //FEmail.enviar("Marcus", aluno.getEmail_user(), "Comprovação de Agendamento - SIAG", corpo);
+            FEmail.enviar("SIAG - Agendamento Integrado", aluno.getEmail_user(), "Comprovação de Agendamento - SIAG", corpo);
             procurar();
             
             }else{

@@ -15,7 +15,7 @@ public class Comprovante {
         String head = "<div class=\"header\" style=\"width: 600px; height: 220px; align-content: center;\">\n" +
 "\n" +
 "		<div class=\"logo\" style=\"display: block; float: left; margin-left: 30px\">\n" +
-"				<img src=\"http://i66.tinypic.com/104s4dv.png\" alt=\"SIAG\" style=\"width: 100px; height: 100px;\" />\n" +
+"				<img src=\"http://i64.tinypic.com/ekg47m.png\" alt=\"SIAG\" style=\"width: 180px; height: 100px;\" />\n" +
 "		</div>\n" +
 "\n" +
 "		<div class=\"apresentacao\" style=\"margin-left: 210px;\">\n" +

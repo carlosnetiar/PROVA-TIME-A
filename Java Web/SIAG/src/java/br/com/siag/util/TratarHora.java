@@ -9,6 +9,7 @@ import java.util.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -39,5 +40,16 @@ public class TratarHora {
         Time time = new Time(data.getTime());
         
         return time;
+    }
+    
+     /**
+     * 
+     * @return DIA ATUAL DO SISTEMA NO FORMATO yyyy-MM-dd
+     */
+    public static String dataSistema() {
+        Calendar data = Calendar.getInstance();
+        Date d = data.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");        
+        return dateFormat.format(d);
     }
 }
