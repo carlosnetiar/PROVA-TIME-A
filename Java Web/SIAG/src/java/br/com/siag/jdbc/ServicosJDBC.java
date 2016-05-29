@@ -26,7 +26,12 @@ public class ServicosJDBC implements ServicosDAO {
     public ServicosJDBC(Connection conexao) {
         this.conexao = conexao;
     }
-
+    
+    /**
+     * 
+     * @param codigoCategoria
+     * @return TODOS OS SERVIÇOS DISPONÍVEIS
+     */
     @Override
     public List<ServicoBean> listarServicosDisponiveis(String codigoCategoria) {
         List<ServicoBean> listServicos = new ArrayList<>();
@@ -58,6 +63,10 @@ public class ServicosJDBC implements ServicosDAO {
         return listServicos;
     }
 
+    /**
+     * 
+     * @return TODAS AS CATEGORIAS DISPONÍVEIS
+     */
     @Override
     public List<CatServicoBean> listarCategoriasDisponiveis() {
         PreparedStatement pst;

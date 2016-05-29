@@ -12,6 +12,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+/**
+ * 
+ * @author marcus
+ * CLASSSE RESPONSÁVEL POR FILTRAR CONEXÃO E CRIAR ATRIBUTO PRA REUSO
+ */
 public class ConexaoFilter implements Filter {
     
     private FilterConfig filterConfig = null;
@@ -20,6 +25,7 @@ public class ConexaoFilter implements Filter {
         
     }    
     
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {

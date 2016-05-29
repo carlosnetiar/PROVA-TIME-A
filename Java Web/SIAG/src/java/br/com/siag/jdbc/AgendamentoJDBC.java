@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.siag.jdbc;
 
 import br.com.siag.beans.AgendaBean;
@@ -17,6 +12,7 @@ import java.util.List;
 /**
  *
  * @author marcus
+ * JDBC RESPONSÁVEL POR REALIZAR OPERAÇÕES NO BANCO EM RELAÇÃO AO AGENDAMENTO
  */
 public class AgendamentoJDBC implements AgendamentoDAO {
 
@@ -26,6 +22,11 @@ public class AgendamentoJDBC implements AgendamentoDAO {
         this.conexao = conexao;
     }
     
+    /**
+     * 
+     * @param agendamento
+     * @return MÉTODO RESPONSÁVEL POR AGENDAR UM HORARIO
+     */
     @Override
     public boolean agendarAula(AgendaBean agendamento) {
         PreparedStatement pst;
@@ -48,7 +49,12 @@ public class AgendamentoJDBC implements AgendamentoDAO {
 
         return b;
     }
-
+    
+    /**
+     * 
+     * @param CPF
+     * @return MÉTODO RESPONSÁVEL POR LISTAR TODOS OS AGENDAMENTOS
+     */
     @Override
     public List<AgendaBean> listarAgendamento(String CPF) {
         List<AgendaBean> listHorarios = new ArrayList<>();

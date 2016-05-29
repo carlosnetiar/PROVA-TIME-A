@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.siag.dao;
 
 import br.com.siag.beans.AgendaBean;
@@ -11,6 +6,7 @@ import java.util.List;
 /**
  *
  * @author marcus
+ * DAO QUE SERVIRÁ DE ACESSO PARA JDBC RELACIONADO A AGENDAMENTO
  */
 public interface AgendamentoDAO {
     /**

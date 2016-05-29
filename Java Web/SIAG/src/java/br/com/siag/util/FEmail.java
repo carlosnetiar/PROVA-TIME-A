@@ -10,6 +10,12 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * 
+ * @author marcus
+ * 
+ * CLASSE RESPONSÁVEL POR FAZER ENVIO DE E-MAIL PARA O CLIENTE
+ */
 public class FEmail {
     
     public static boolean isCnpj(String cnpj){
@@ -19,8 +25,8 @@ public class FEmail {
     public static boolean enviar(String nome, String email, String assunto, String corpo){
         boolean enviado = false;
         
-        String emailRemetente = "nao-responda@fradetecnologia.com.br";
-        String nomeRemetente = "FRADE Tecnologia";
+        String emailRemetente = "mcartagenes@fradetecnologia.com.br";
+        String nomeRemetente = "SIAG - SISTEMA INTEGRADO DE AGENDAMENTO";
 
         String protocolo = "smtp";
         String servidor = "smtplw.com.br";  // do painel de controle do SMTP
@@ -68,10 +74,8 @@ public class FEmail {
           tr.close();
           
           enviado = true;
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        } catch (MessagingException e) {
-          e.printStackTrace();
+        } catch (UnsupportedEncodingException | MessagingException e) {
+                System.out.println(e);
         }
     
         return enviado;
