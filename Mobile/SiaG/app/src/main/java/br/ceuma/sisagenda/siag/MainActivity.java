@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity
 
         MenuItem searchItem = menu.findItem(R.id.searchAgendamento);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+
         searchView.setOnQueryTextListener(this);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -54,6 +57,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        if(!ValidaCpf.isValidCPF(query)){
+            Toast.makeText(MainActivity.this, "Digite um cpf válido!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
         return false;
     }
 

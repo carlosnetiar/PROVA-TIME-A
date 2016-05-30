@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import br.ceuma.sisagenda.siag.br.ceuma.sisagenda.siag.model.Agendamento;
-
 /**
  * Created by INFORMÁT on 22/05/2016.
  */
