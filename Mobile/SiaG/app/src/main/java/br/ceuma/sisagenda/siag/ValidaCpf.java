@@ -1,8 +1,5 @@
 package br.ceuma.sisagenda.siag;
 
-/**
- * Created by INFORMÁT on 29/05/2016.
- */
 public class ValidaCpf {
 
     private static final int[] pesoCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};

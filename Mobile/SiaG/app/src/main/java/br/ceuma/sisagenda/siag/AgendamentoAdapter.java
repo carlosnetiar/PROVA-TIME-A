@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by INFORMÁT on 22/05/2016.
  */
-public class AgendamentoAdapter extends BaseAdapter {
+public class AgendamentoAdapter extends BaseAdapter { // Classe para transformar um objeto em um item da ListView
 
     Context context;
     List<Agendamento> agendamentoList;

@@ -36,6 +36,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import static android.provider.CalendarContract.Events;
+
 public class AgendamentoActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     // json array response url
@@ -106,12 +108,12 @@ public class AgendamentoActivity extends AppCompatActivity implements AdapterVie
             progressDialog.setMessage("Aguarde...");
             progressDialog.setCancelable(false);
 
-            teste(query);
+            consultaWebService(query);
         }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch (item.getItemId()) { // Retorna para tela home
             case android.R.id.home:
                 Toast.makeText(getApplicationContext(), "Home",
                         Toast.LENGTH_LONG).show();
@@ -123,7 +125,7 @@ public class AgendamentoActivity extends AppCompatActivity implements AdapterVie
         }
     }
 
-    private void teste(String query) {
+    private void consultaWebService(String query) { // Consulta por meio da api Volley
 
         showpDialog();
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, urlJsonArray + query,
@@ -161,7 +163,7 @@ public class AgendamentoActivity extends AppCompatActivity implements AdapterVie
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                         hidepDialog();
                     }
@@ -169,7 +171,7 @@ public class AgendamentoActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("Volley", "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 hidepDialog();
             }
         });
@@ -188,7 +190,6 @@ public class AgendamentoActivity extends AppCompatActivity implements AdapterVie
             progressDialog.dismiss();
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -200,7 +201,7 @@ public class AgendamentoActivity extends AppCompatActivity implements AdapterVie
         progressDialog.setMessage("Aguarde...");
         progressDialog.setCancelable(false);
 
-        alertDialog
+        alertDialog // Abaixo chama o provedor de agenda
                 .setTitle("Sincronização!")
                 .setMessage("Deseja sincronizar com Google Agenda?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -212,6 +213,8 @@ public class AgendamentoActivity extends AppCompatActivity implements AdapterVie
                         long calID = 3;
                         long startMillis = 0;
                         long endMillis = 0;
+
+                        TimeZone tz = TimeZone.getDefault();
 
                         Agendamento agendamento = (Agendamento) listadeagendamentos.getItemAtPosition(pos);
 
@@ -227,28 +230,34 @@ public class AgendamentoActivity extends AppCompatActivity implements AdapterVie
                         Calendar beginTime = Calendar.getInstance();
 
                         beginTime.set(ano, mes-1, dia, hora, minutos, 0);
-                        System.out.println(beginTime.getTime()+ "BEGINTIME -  Teste....");
 
                         startMillis = beginTime.getTimeInMillis();
                         Calendar endTime = Calendar.getInstance();
                         endTime.set(ano, mes-1, dia, hora+1, minutos, 0);
                         endMillis = endTime.getTimeInMillis();
 
-                        TimeZone tz = TimeZone.getDefault();
+
 
                         ContentResolver cr = getContentResolver();
                         ContentValues values = new ContentValues();
-                        values.put(CalendarContract.Events.DTSTART, startMillis);
-                        values.put(CalendarContract.Events.DTEND, endMillis);
-                        values.put(CalendarContract.Events.TITLE, agendamento.getCategoria());
-                        values.put(CalendarContract.Events.DESCRIPTION, agendamento.getCategoria());
-                        values.put(CalendarContract.Events.CALENDAR_ID, calID);
-                        values.put(CalendarContract.Events.EVENT_TIMEZONE, tz.getID());
-                        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(),
-                                Manifest.permission.WRITE_CALENDAR);
+                        ContentValues reminder = new ContentValues();
+
+                        //adicionando evento
+                        values.put(Events.DTSTART, startMillis);
+                        values.put(Events.DTEND, endMillis);
+                        //values.put(Events.DURATION, "PT1H");
+                        values.put(Events.TITLE, agendamento.getCategoria());
+                        values.put(Events.DESCRIPTION, agendamento.getCategoria());
+                        values.put(Events.CALENDAR_ID, calID);
+                        values.put(Events.EVENT_TIMEZONE, tz.getID());
+
+                        //adicionando lembrete
+                        reminder.put(CalendarContract.Reminders.EVENT_ID, calID);
+                        reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+                        reminder.put(CalendarContract.Reminders.MINUTES, 30);
 
                         // Here, thisActivity is the current activity
-                        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                        if (ContextCompat.checkSelfPermission(getApplicationContext(), // A partir da API 23 é necessário a verificação de permissão
                                 Manifest.permission.WRITE_CALENDAR)
                                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -274,7 +283,8 @@ public class AgendamentoActivity extends AppCompatActivity implements AdapterVie
                             }
                         }else{
 
-                            Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI,values);
+                            Uri uri = cr.insert(Events.CONTENT_URI,values);
+                            Uri uri2 = cr.insert(CalendarContract.Reminders.CONTENT_URI,reminder);
 
                         }
                         hidepDialog();
