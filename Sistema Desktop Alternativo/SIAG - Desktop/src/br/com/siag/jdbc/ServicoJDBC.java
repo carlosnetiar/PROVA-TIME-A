@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -59,9 +60,9 @@ public class ServicoJDBC implements ServicoDAO {
     public List<GuicheBean> listarGuicheEspecifico(int cod_cat) {
         PreparedStatement pst;
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT tbl_guiche.numero AS guiche,tbl_cat_servico.nome_cat FROM tbl_guiche ");
-        sql.append("INNER JOIN tbl_cat_servico ON tbl_cat_servico.codigo = tbl_guiche.cod_catservico ");
-        sql.append("WHERE tbl_guiche.codigo NOT IN (SELECT tbl_usuario.cod_guiche FROM tbl_usuario) AND tbl_cat_servico.codigo='"+cod_cat+"'");
+        sql.append("SELECT gu.numero FROM tbl_guiche gu ");
+        sql.append("INNER JOIN tbl_cat_servico cs ON cs.codigo = gu.cod_catservico ");
+        sql.append("WHERE gu.codigo NOT IN (SELECT us.cod_guiche FROM tbl_usuario us WHERE us.cod_guiche IS NOT NULL) AND cs.codigo='"+cod_cat+"'");
         ResultSet rs;
         List<GuicheBean> listGuiche = new ArrayList<>();
         GuicheBean guiche;
@@ -72,7 +73,7 @@ public class ServicoJDBC implements ServicoDAO {
 
             while (rs.next()) {
                 guiche = new GuicheBean();
-                guiche.setNum_guiche(rs.getInt("guiche"));
+                guiche.setNum_guiche(rs.getInt("numero"));
                 listGuiche.add(guiche);
             }
             pst.close();

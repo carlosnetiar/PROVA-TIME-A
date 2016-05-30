@@ -24,11 +24,19 @@ public class FeedbackTM extends AbstractTableModel {
 
     private Connection conexao;
     private final List<FeedBackBean> lista;
-    String[] colunas = {"Nome, Média de Avaliação"};
+    private final String[] colunas = {"Nome do atendente", "Média de Avaliação"};
 
     public FeedbackTM() throws ClassNotFoundException {
         FeedbackDAO fbDAO = DAOFactory.criarFeedbackDAO(conexao);
         lista = fbDAO.listarFeedBack();
+        
+        System.out.println(lista.get(0).getNome_atendente());
+        System.out.println(lista.get(0).getMedia());
+    }
+    
+    public void addRow(FeedBackBean feedback){
+        this.lista.add(feedback);
+        this.fireTableDataChanged();
     }
 
     @Override
@@ -43,11 +51,17 @@ public class FeedbackTM extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int i, int i1) {
+        lista.size();
         switch(i1){
             case 0: return lista.get(i).getNome_atendente();
             case 1: return lista.get(i).getMedia();
         }
         return null;
+    }
+    
+    @Override
+    public String getColumnName(int columnIndex){
+        return this.colunas[columnIndex];
     }
 
 }

@@ -55,4 +55,8 @@ public class AgendamentosTM extends AbstractTableModel {
         return null;
     }
 
+    @Override
+    public String getColumnName(int columnIndex){
+        return this.colunas[columnIndex];
+    }
 }

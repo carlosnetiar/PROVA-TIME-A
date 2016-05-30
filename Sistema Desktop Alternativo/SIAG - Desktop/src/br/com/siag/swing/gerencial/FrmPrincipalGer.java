@@ -32,7 +32,7 @@ import javax.swing.JOptionPane;
 public class FrmPrincipalGer extends javax.swing.JFrame {
 
     private Connection conexao;
-
+    private FeedbackTM feedbackTM;
     /**
      * Creates new form FrmPrincipal
      */
@@ -153,7 +153,7 @@ public class FrmPrincipalGer extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("SIAG - ATENDENTE");
+        setTitle("SIAG - GERENTE");
         setResizable(false);
 
         JPN_PRINCIPAL.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -1062,8 +1062,9 @@ public class FrmPrincipalGer extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             ServicoDAO servicoDAO = DAOFactory.criarServicoDAO(conexao);
+            int i= 0;
             this.JCBX_GUICHE_ESPECIFICO.removeAllItems();
-            for (int i = 0; i < servicoDAO.listarGuicheEspecifico(this.JCBX_CAT_SERVICO.getSelectedIndex() + 1).size(); i++) {
+            for (i=0; i < servicoDAO.listarGuicheEspecifico(this.JCBX_CAT_SERVICO.getSelectedIndex() + 1).size(); i++) {
                 this.JCBX_GUICHE_ESPECIFICO.addItem(servicoDAO.listarGuicheEspecifico(this.JCBX_CAT_SERVICO.getSelectedIndex() + 1).get(i).getNum_guiche().toString());
             }
             if (this.JCBX_GUICHE_ESPECIFICO.getItemCount() == 0) {
@@ -1071,6 +1072,8 @@ public class FrmPrincipalGer extends javax.swing.JFrame {
             } else {
                 this.JCBX_GUICHE_ESPECIFICO.setEnabled(true);
             }
+            
+            System.out.println(JCBX_CAT_SERVICO.getSelectedItem());
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(FrmPrincipalGer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1078,36 +1081,48 @@ public class FrmPrincipalGer extends javax.swing.JFrame {
 
     private void JB_ADD_ATENDENTEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_ADD_ATENDENTEActionPerformed
         try {
-            // TODO add your handling code here:
+            /**
+             * EVENTO RESPONSÁVEL POR ADICIONAR UM ATENDENTE, SOMENTE GERENTES TEM ACESSO A ESSE MÓDULO
+             */
+            
+            //DAOS E BEANS NECESSÁRIOS PARA O MÉTODO
             UsuarioDAO usuarioDAO = DAOFactory.criarUsuarioDAO(conexao);
             UsuarioBean ub = new UsuarioBean();
-
+            
+            //CONVERSÃO DA DATA NO FORMATO dd/MM/yyyy PARA yyyy-MM-dd
             SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd");
             String data = dateF.format(JDC_DATANASC_ATENDENTE.getDate());
-
+            
+            //SETAR DADOS DE FORMULÁRIO DENTRO DO BEAN
             ub.setCod_guiche(Integer.valueOf(this.JCBX_GUICHE_ESPECIFICO.getSelectedItem().toString()));
             ub.setNome_usuario(this.JTF_NOME_ATENDENTE.getText().trim().toUpperCase());
             ub.setCpf_usuario(this.JTF_CPF_ATENDENTE.getText().replace(".", "").replace("-", "").trim());
             ub.setDada_nascimento(java.sql.Date.valueOf(data));
 
+            //TESTA A INSERÇÃO AO BANCO DE DADOS
             if (usuarioDAO.novo(ub)) {
+                //SE INSERIR NORMALMALMENTE
                 JOptionPane.showMessageDialog(null, "Novo atendente inserido com sucesso !");
             } else {
+                //TRATAMENTO DE ERRO
                 JOptionPane.showMessageDialog(null, "Erro ao inserir atendente !");
             }
         } catch (ClassNotFoundException | NullPointerException ex) {
+            //TRATAMENTO DE EXCESSÃO
             JOptionPane.showMessageDialog(null, "Erro ao inserir atendente !");
         }
     }//GEN-LAST:event_JB_ADD_ATENDENTEActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        /**
+         * MÉTODO RESPONSÁVEL POR CHAMAR O CARDLAYOUT QUE EXIBIRÁ OS FEEDBACKS
+         */
+        CardLayout cl = (CardLayout) (JPN_CONTAINER.getLayout());
+        cl.show(JPN_CONTAINER, "JC_LIST_FEEDBACK");
         try {
-            // TODO add your handling code here:
-            CardLayout cl = (CardLayout) (JPN_CONTAINER.getLayout());
-            cl.show(JPN_CONTAINER, "JC_LIST_FEEDBACK");
-            
-            FeedbackTM fbtm = new FeedbackTM();
-            this.JT_FEEDBACK.setModel(fbtm);
+            //INSTANCIAÇÃO DO TABLE MODEL 'FeedbackTM' E ATRIBUIÇÃO DO MODEL NA TABELA JT_FEEDBACK
+            feedbackTM = new FeedbackTM();
+            this.JT_FEEDBACK.setModel(feedbackTM);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(FrmPrincipalGer.class.getName()).log(Level.SEVERE, null, ex);
         }

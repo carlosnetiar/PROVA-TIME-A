@@ -7,7 +7,9 @@ package br.com.siag.swing;
 
 import br.com.siag.beans.UsuarioBean;
 import br.com.siag.dao.UsuarioDAO;
+import br.com.siag.swing.gerencial.FrmPrincipalGer;
 import br.com.siag.util.DAOFactory;
+import br.com.siag.util.ValidarCPF;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -145,11 +147,11 @@ public class frmLogin extends javax.swing.JFrame {
             /**
              * MÉTODO RESPONSÁVEL POR AUTENTICAR USUÁRIO
              */
-            
+
             //DAO E BEAN RESPONSÁVEL
             UsuarioDAO usuarioDAO = DAOFactory.criarUsuarioDAO(conexao);
             UsuarioBean user;
-            
+
             //VARIAVEL QUE RECUPERA STRING DO FORMULÁRIO
             String cpf = JTF_CPF_LOGIN.getText().trim().replace("-", "").replace(".", "");
 
@@ -158,25 +160,32 @@ public class frmLogin extends javax.swing.JFrame {
             String data = dateF.format(JC_DATANASC_LOGIN.getDate());
 
             /**
-             * REALIZA A VERIFICAÇÃO ATRAVÉS DO MÉTODO logar E VERIFICA SE O RETORNO É DIFERENTE DE NULO
-             * SE O RETORNO FOR DIFERENTE DE NULO, USUÁRIO FOI ENCONTRADO, SE NÃO, USUÁRIO NÃO ENCONTRADO
+             * REALIZA A VERIFICAÇÃO ATRAVÉS DO MÉTODO logar E VERIFICA SE O
+             * RETORNO É DIFERENTE DE NULO SE O RETORNO FOR DIFERENTE DE NULO,
+             * USUÁRIO FOI ENCONTRADO, SE NÃO, USUÁRIO NÃO ENCONTRADO
              */
-            if (usuarioDAO.logar(cpf, java.sql.Date.valueOf(data)) != null) {
+            if (usuarioDAO.logar(cpf, java.sql.Date.valueOf(data)) != null && ValidarCPF.isValidCPF(cpf)) {
                 //FECHAR FORMULÁRIO DE LOGIN
                 dispose();
-                
+
                 //ATRIBUIÇÃO DOS VALORES DO USUÁRIO NA VARIAVEL user
                 user = usuarioDAO.logar(cpf, java.sql.Date.valueOf(data));
-                
-                //INSTANCIAÇÃO DO FORMULÁRIO PRINCIPAL
-                FrmPrincipal principal = new FrmPrincipal();
-                principal.setVisible(true);
-                
-                //SETAR TEXTOS ESTÁTICOS REFERENTES AO ATENDENTE
-                principal.JL_NOME_USER.setText(user.getNome_usuario());
-                principal.JL_ID_USER.setText(String.valueOf(user.getCodigo()));
-                principal.JL_GUICHE_ATUAL.setText(String.valueOf(user.getCod_guiche()));
-                principal.JL_CATEGORIA_RESPONSAVEL.setText(user.getCategoria_servico());
+
+                //VALIDAÇÃO DO TIPO DE USUÁRIO
+                if (user.getTipo().equals("ATEND")) {
+                    FrmPrincipal principal = new FrmPrincipal();
+                    principal.setVisible(true);
+                    //SETAR TEXTOS ESTÁTICOS REFERENTES AO ATENDENTE
+                    principal.JL_NOME_USER.setText(user.getNome_usuario());
+                    principal.JL_ID_USER.setText(String.valueOf(user.getCodigo()));
+                    principal.JL_GUICHE_ATUAL.setText(String.valueOf(user.getCod_guiche()));
+                    principal.JL_CATEGORIA_RESPONSAVEL.setText(user.getCategoria_servico());
+                } else {
+                    FrmPrincipalGer principalGerencial = new FrmPrincipalGer();
+                    principalGerencial.setVisible(true);
+                    principalGerencial.JL_NOME_USER.setText(user.getNome_usuario());
+                }
+
             } else {
                 //TRATAMENTO DE ERRO
                 JOptionPane.showMessageDialog(null, "Usuário não encontrado !");

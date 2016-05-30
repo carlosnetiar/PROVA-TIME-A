@@ -14,6 +14,7 @@ import br.com.siag.dao.UsuarioDAO;
 import br.com.siag.tablemodel.AgendamentosTM;
 import br.com.siag.util.DAOFactory;
 import br.com.siag.util.Horarios;
+import br.com.siag.util.ValidarCPF;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -39,7 +40,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
      */
     public FrmPrincipal() {
         initComponents();
-        
+
         //SETAR O ÍCONE NO FORMULARIO
         URL url = this.getClass().getResource("ICO.png");
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);
@@ -54,7 +55,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         this.JCBX_HORARIO.addItem(Horarios.hora06);
         this.JCBX_HORARIO.addItem(Horarios.hora07);
         this.JCBX_HORARIO.addItem(Horarios.hora08);
-
+        JL_ID_USER.setVisible(false);
         /**
          * TRECHO QUE ADICIONARÁ TODOS OS GUICHÊS DIRETO DO BANCO DE DADOS
          */
@@ -447,6 +448,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         JPN_PESQUISAR_CPF_ALUNO.setBorder(javax.swing.BorderFactory.createTitledBorder("Pesquisar"));
 
+        try {
+            JTF_PESQUISAR_ALUNO_CPF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         jLabel3.setText("CPF:");
 
         jButton3.setText("Pesquisar");
@@ -630,7 +637,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jMenu3.setText("Pessoa Física");
 
-        jMenuItem3.setText("Cadastro");
+        jMenuItem3.setText("Aluno");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -792,9 +799,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if (alunoBean.getCpf_aluno().length() < 11 || alunoBean.getNome_aluno().isEmpty() || alunoBean.getEmail_aluno().isEmpty() || alunoBean.getTelefone_aluno().isEmpty()) {
                 //SE TIVER ALGUM CAMPO EM BRANCO
                 JOptionPane.showMessageDialog(null, "Por favor, digite todos os campos !");
+            } else if (!ValidarCPF.isValidCPF(alunoBean.getCpf_aluno())) {
+                    //VALIDAÇÃO DE CPF
+                    JOptionPane.showMessageDialog(null, "Digite um CPF Válido !");
             } else {
                 //SE OCORRER TUDO BEM
                 alunoDAO.inserir(alunoBean);
+                JTF_NOME_ALUNO.setText("");
+                JTF_CPF_ALUNO.setText("");
+                JTF_EMAIL.setText("");
+                JTF_TELEFONE.setText("");
             }
         } catch (ClassNotFoundException ex) {
             //TRATAMENTO DE EXCESSÃO
@@ -821,7 +835,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             alunoDAO = DAOFactory.criarAlunoDAO(conexao);
 
             //PROCURAR NO BANCO DE DADOS UM ALUNO COM UM CPF ESPECÍFICO
-            alunoBean = alunoDAO.procurar(JTF_PESQUISAR_ALUNO_CPF.getText());
+            alunoBean = alunoDAO.procurar(JTF_PESQUISAR_ALUNO_CPF.getText().replace(".", "").replace("-", "").trim());
 
             //VERIFICA SE EXISTE ALGUM ALUNO COM AQUELE CPF
             if (alunoBean != null) {
@@ -840,7 +854,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 ID_ALUNO.setText(String.valueOf(alunoBean.getId_aluno()));
                 BTN_ALTERAR.setEnabled(true);
                 BTN_DELETAR.setEnabled(true);
-            } else {
+            } else if(!ValidarCPF.isValidCPF(JTF_PESQUISAR_ALUNO_CPF.getText().replace(".", "").replace("-", "").trim())){
+                JOptionPane.showMessageDialog(null, "Digite um CPF Válido");
+            }
+            else {
                 //SE NÃO EXISTIR, LIMPAR OS CAMPOS E RETORNAR UMA MENSAGEM
                 JTF_NOME_ALTERAR.setEnabled(false);
                 JTF_EMAIL_ALTERAR.setEnabled(false);
@@ -916,9 +933,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if (alunoDAO.alterar(cod, alunoBean)) {
                 JOptionPane.showMessageDialog(null, "Alterado com sucesso !");
                 JTF_NOME_ALTERAR.setText("");
+                JTF_NOME_ALTERAR.setEnabled(false);
                 JTF_EMAIL_ALTERAR.setText("");
+                JTF_EMAIL_ALTERAR.setEnabled(false);
                 JTF_TELEFONE_ALTERAR.setText("");
+                JTF_TELEFONE_ALTERAR.setEnabled(false);
                 JTF_CPF_ALTERAR.setText("");
+                JTF_CPF_ALTERAR.setEnabled(false);
                 ID_ALUNO.setText("");
                 BTN_ALTERAR.setEnabled(false);
                 BTN_DELETAR.setEnabled(false);

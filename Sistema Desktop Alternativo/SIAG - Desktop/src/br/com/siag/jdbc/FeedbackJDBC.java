@@ -111,14 +111,12 @@ public class FeedbackJDBC implements FeedbackDAO {
         StringBuilder sql = new StringBuilder();
         ResultSet rs;
         
-        sql.append("SELECT tbl_agendamento.cod_atendente, tbl_feedback.nota, tbl_feedback.cod_agendamento, tbl_usuario.nome ");
+        sql.append("SELECT tbl_usuario.nome, AVG(tbl_feedback.nota) AS media ");
         sql.append("FROM tbl_feedback ");
         sql.append("INNER JOIN tbl_agendamento ON tbl_agendamento.codigo = tbl_feedback.cod_agendamento ");
         sql.append("INNER JOIN tbl_usuario ON tbl_usuario.codigo = tbl_agendamento.cod_atendente ");
         sql.append("WHERE tbl_feedback.origem='aluno'");
-        
-        int inicio = 0, total=0;
-        float media = 0;
+
         try{
             pst = conexao.prepareStatement(sql.toString());
             rs = pst.executeQuery();
@@ -126,8 +124,7 @@ public class FeedbackJDBC implements FeedbackDAO {
             while(rs.next()){
                 feedBackBean = new FeedBackBean();
                 feedBackBean.setNome_atendente(rs.getString("nome"));
-                total+=rs.getInt("nota");
-                inicio++;
+                feedBackBean.setMedia(rs.getFloat("media"));
                 listFeedBack.add(feedBackBean);
             }
             pst.close();

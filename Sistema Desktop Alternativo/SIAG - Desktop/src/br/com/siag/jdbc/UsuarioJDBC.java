@@ -41,8 +41,8 @@ public class UsuarioJDBC implements UsuarioDAO{
         UsuarioBean user= null;
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT tbl_usuario.*, tbl_guiche.*, tbl_cat_servico.* FROM tbl_usuario ");
-        sql.append("INNER JOIN tbl_guiche ON tbl_guiche.codigo = tbl_usuario.cod_guiche ");
-        sql.append("INNER JOIN tbl_cat_servico ON tbl_cat_servico.codigo = tbl_guiche.cod_catservico ");
+        sql.append("LEFT OUTER JOIN tbl_guiche ON tbl_guiche.codigo = tbl_usuario.cod_guiche ");
+        sql.append("LEFT OUTER JOIN tbl_cat_servico ON tbl_cat_servico.codigo = tbl_guiche.cod_catservico ");
         sql.append("WHERE cpf='"+cpf+"' AND data_nascimento='"+dataNasc+"'");
         ResultSet rs;
         try{
@@ -56,6 +56,7 @@ public class UsuarioJDBC implements UsuarioDAO{
                 user.setCod_guiche(rs.getInt("cod_guiche"));
                 user.setCpf_usuario(rs.getString("cpf"));
                 user.setCategoria_servico(rs.getString("nome_cat"));
+                user.setTipo(rs.getString("enm_tipo"));
             }
             pst.close();
             rs.close();

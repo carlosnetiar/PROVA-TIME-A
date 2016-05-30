@@ -19,6 +19,15 @@ public class UsuarioBean {
     private Integer cod_guiche;
     private Integer codigo;
     private String categoria_servico;
+    private String tipo;
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     public String getCategoria_servico() {
         return categoria_servico;
