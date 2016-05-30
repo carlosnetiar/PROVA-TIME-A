@@ -1,0 +1,290 @@
+img,
+embed,
+object,
+iframe,
+video {
+    max-width: 100%;
+}
+
+body {
+    background-color: #bfd5f5;
+    font-size: 62.5%;
+    font-family: tahoma;
+}
+
+.container  {
+	width: 100%;
+	margin: 0 auto;
+	background-color: #FFFFFF;
+}
+ 
+.sidebar {
+	width: 31.25%;
+	float: left;
+	background-color: #A9A9A9;
+}
+
+.menulateral {
+	padding: 0.4em;
+	font-size: 1.8em;
+	line-height: 2.2em; /*24 pixels*/	
+	display: block;
+	height: 2EM;
+	background-color: #D3D3D3;
+	margin: 1px 0px;
+	text-decoration: none;
+	color: #000000;
+}
+
+.menulateral:hover {
+	background-color: #878787;
+	color: #FFFFFF;	
+	cursor:pointer;
+}
+
+
+.topmenu { display: none; background-color: #07699e; color: #FFFFFF}
+.topmodulos { display: none; background-color: #07699e; color: #FFFFFF }
+
+.main {
+	width: 68.75%;
+	float: right;
+	background-color: #F4F4F4;
+}
+
+.conteudo {
+	width: 95%;
+	margin: 0.7em auto;
+	border: solid 1px;
+	padding: 1em;
+}
+
+.box1,.box2,.box3 {
+	width: 33.33%;
+	height: 35em;
+	text-align: center;
+}
+
+.box1 { background-color: #0097c2; }
+.box2 { background-color: #8ab9c6; }
+.box3 { background-color: #4593aa; }
+
+
+img.logo {
+	width: 130px;
+	padding: 1em;
+	margin: 1em;
+	background-color: #FFFFFF;
+}
+img.ico {
+	width: 32px;
+	margin: 1em;
+}
+
+.legenda_icones {
+	background-color: #E4E4E4;
+	display: block;
+	margin: 1em 3em;
+}
+
+h1.pagina_titulo {
+	color: #000066;
+	text-align: left;
+	font-size: 2em;
+}
+
+h3.pagina_info {
+	margin-top: -1em;
+	font-style: italic;
+	color: #666666;
+	font-size: 1em;
+}
+
+p.pagina_descricao {
+	text-indent: 4em;
+	text-align: justify;
+	font-size: 1.6em;
+}
+
+li.pagina {
+	font-size: 1.7em;
+	font-weight: bold;
+}
+
+img.item_img {
+	border: 0px;
+	background-color: #000000;
+}
+
+img.item_img:hover {
+	cursor:pointer;
+}
+
+iframe.item {
+	margin: 0px auto;
+}
+
+div.item_img {
+	border: 2px solid;
+	margin: 0px auto;
+}
+
+div.item {
+	width: 80%;
+	pading: 1em;
+	border: 0px;
+	margin: 0px auto;
+}
+
+p.item_titulo {
+	font-size: 1.8em;
+	font-weight: bold;
+	margin-top: 3em;
+}
+
+p.item_descricao {
+	font-size: 1.4em;
+	font-weight: normal;
+}
+
+
+div.title {
+	background-color: #333333;
+}
+
+.title_modulo {
+	font-size: 1.6em; /*16 pixels*/
+	font-weight: bold;
+}
+
+p.title {
+	background-image:url("../img/back_title.jpg");
+	background-repeat:repeat;
+	background-color: #FF0000;
+	font-size: 3.6em; /*16 pixels*/
+	line-height: 1.0em; /*24 pixels*/
+	padding: 0.5em; /*8 pixels*/
+	font-family: "Times New Roman";
+	border-style: none none double none;
+	padding: 0.5em; /*8 pixels*/
+	display: block;
+}
+
+
+.msg_erro {
+
+	width: 80%;
+	font-family: tahoma,arial;
+	font-size: 2em;
+	text-align: center;
+	color: #FFFFFF;
+	background-color: #A93939;
+	margin: 3em auto;
+	display: block;
+}
+
+
+
+
+/*
+Vamos considerar as seguintes referencias (Layout Responsivo):
+
+ 320 pixels * Smartphones no modo retrato.
+ 480 pixels * Smartphones no modo paisagem.
+ 600 pixels * Tablets pequenos. Ex: Amazon Kindle (600×800)
+ 768 pixels * Tablets maiores em modo retrato. Ex: iPad (768×1024)
+1024 pixels * Tablets maiores em modo paisagem, monitores antigos.
+1200 pixels * Monitores wide.
+
+*/
+@media only screen and (max-width : 319px) {
+      /* estilos */
+	html { background: #999999; }
+
+	.main { width: 100%; float: top;}
+	.topmenu,.topmodulos { display: block; }
+
+	img.logo { 	width: 110px; }
+	.box1,.box2,.box3 {
+		display: block;
+		width: 100%;
+	}
+	
+	.sidebar {
+		width: 100%;
+		float: top;
+		background-color: #A9A9A9;
+	}	
+}
+
+@media only screen and (min-width : 320px) and (max-width : 480px) {
+      /* estilos */
+	html { background: #AAAAAA; }
+
+	.main { width: 100%; float: top;}
+	.topmenu,.topmodulos { display: block; }
+
+	img.logo { 	width: 110px; }
+	.box1,.box2,.box3 {
+		display: block;
+		width: 100%;
+	}
+	
+ 
+	.sidebar {
+		width: 100%;
+		float: top;
+		background-color: #A9A9A9;
+	}
+}	
+	
+
+@media only screen and (min-width : 481px) and (max-width : 767px) {
+      /* estilos */
+	html { background: #BBBBBB; }
+
+	img.logo { 	width: 110px; }
+	.menulateral {	
+		width: 46%;
+		display: inline-block;
+
+	}
+	.box1,.box2,.box3 {
+		float: inherit;
+		display: block;
+	}
+
+	.main { width: 100%; float: top;}
+	.topmenu,.topmodulos { display: block; }
+
+	.sidebar {
+		width: 100%;
+		float: top;
+		background-color: #A9A9A9;
+	}	
+	
+}
+
+@media only screen and (min-width : 768px) and (max-width : 1024px) {
+      /* estilos */
+	html { background: #CCCCCC; }
+
+	.box1,.box2,.box3 {
+		float: inherit;
+		display: block;
+	}
+
+
+}
+
+@media only screen and (min-width : 1025px) {
+      /* estilos */
+	html { background: #DDDDDD; }
+
+	.box1,.box2,.box3 {
+		float: inherit;
+		display: block;
+	}
+
+
+}

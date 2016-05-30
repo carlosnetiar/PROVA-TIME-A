@@ -1,0 +1,42 @@
+div.fullscreen {
+	width: 100%;
+	height: 100%;
+    	z-index: 1000;
+    	display: none;
+    	position: absolute;
+    	text-align: center;
+    	margin:0px;
+    	padding:0px;
+	position: fixed;
+	bottom: 0;
+	right: 0;    	
+}
+
+div.main_img {
+	width: 80%;
+	height: 80%;
+	align: center;
+	position: relative;
+	margin-top: -30px;
+	z-index: 1002;
+	margin: 0 auto; 
+}
+
+img.zoom:hover {
+	cursor:pointer
+}
+
+
+img.imgview {
+	border: 2px;
+	border-color: #000000;
+	border-style: solid;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.bt_close {
+	position: relative;
+	margin: 5px;
+	z-index: 1003;
+}
