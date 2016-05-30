@@ -25,7 +25,7 @@ public class FEmail {
     public static boolean enviar(String nome, String email, String assunto, String corpo){
         boolean enviado = false;
         
-        String emailRemetente = "mcartagenes@fradetecnologia.com.br";
+        String emailRemetente = "nao-responda@fradetecnologia.com.br";
         String nomeRemetente = "SIAG - SISTEMA INTEGRADO DE AGENDAMENTO";
 
         String protocolo = "smtp";
