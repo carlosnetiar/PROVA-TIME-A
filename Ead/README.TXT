@@ -9,5 +9,9 @@ Organização, Integração e Tutoriais (EAD) agrupados em site único em liguag
 ** Configuração de acesso ao Banco de Dados
 ** Teste de rotinas básicas e acesso a base.
 
+* Etapa 3
+** Conclusão dos métodos de integração com a base de dados
+** Utilizacao genérica da interface grafica, automatizada pelo banco de dados
+** Inclusão de informações de EAD via banco de dados (Imagens, Textos e Videos)
 
-Link para visualização http://nticeuma.netiar.com.br/
+Link para visualização http://nticeuma.netiar.com.br/php/
